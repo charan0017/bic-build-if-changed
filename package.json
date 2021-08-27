@@ -1,0 +1,38 @@
+{
+  "name": "bic-build-if-changed",
+  "version": "1.0.0",
+  "description": "Run build scripts only when files changed.",
+  "main": "src/main.js",
+  "bin": {
+    "bic": "bin/cli.js",
+    "build-if-changed": "bin/cli.js"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "scripts": {
+    "dev": "nodemon src/test.js"
+  },
+  "keywords": [
+    "build if changed",
+    "bic"
+  ],
+  "author": "Sai Charan",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charan0017/bic-build-if-changed.git"
+  },
+  "homepage": "https://github.com/charan0017/bic-build-if-changed#readme",
+  "bugs": {
+    "url": "https://github.com/charan0017/bic-build-if-changed/issues"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "fs-extra": "^10.0.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
