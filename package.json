@@ -1,6 +1,6 @@
 {
   "name": "bic-build-if-changed",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Run build scripts only when files changed.",
   "main": "src/main.js",
   "bin": {

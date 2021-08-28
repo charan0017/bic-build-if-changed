@@ -1,5 +1,5 @@
 <h1 align="center">  
-   build-if-changed
+   bic-build-if-changed
 </h1>
 
 <h4 align="center">
