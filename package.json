@@ -1,6 +1,6 @@
 {
   "name": "bic-build-if-changed",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Run build scripts only when files changed.",
   "main": "src/main.js",
   "bin": {
@@ -15,8 +15,11 @@
     "dev": "nodemon src/test.js"
   },
   "keywords": [
+    "build",
     "build if changed",
-    "bic"
+    "bic",
+    "react",
+    "vue"
   ],
   "author": "Sai Charan",
   "repository": {

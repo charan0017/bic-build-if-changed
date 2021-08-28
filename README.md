@@ -24,20 +24,31 @@ Build your packages only if they changed since the last build.
 1. Install the package:
 
 ```sh
+npm i bic-build-if-changed -D
+# or
 yarn add bic-build-if-changed -D
 ```
 
 2. Edit your `package.json` module to customize the behavior:
 
 ```js
-// Only watch the "src" directory:
+// Only the "src" & "public" directories:
 "bic": ["src", "public"],
 // Disable bic for a package:
 "bic": false,
+// Use default directories ("src"):
+"bic": true,
 ```
 
-3. Use the package:
-
+3. Use the package: (using with npm)
+```sh
+npm run build-if-changed
+# or
+npm run bic
+# you can use -force (or) -F flag to Force Re-Build
+npm run bic -F
+```
+3. Use the package: (using with yarn)
 ```sh
 yarn build-if-changed
 # or

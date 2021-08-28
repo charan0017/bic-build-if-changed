@@ -21,14 +21,17 @@ const buildIfChanged = async (projectDirPath, forceBuild) => {
     }
 
     if (typeof package.bic === 'boolean') {
-        if (package.bic) {
-            log('Update your bic config in package.json (example - "bic": ["src"])', 'brightRed');
-            log('Refer Readme.md for help!', 'brightYellow');
+        if (!package.bic) {
+            log('bic is disabled!', 'brightRed');
+            log('running build script!', 'brightYellow');
+            await spawnAsync(`cd ${projectDirPath} && npm run build`);
+            return;
         }
-        return;
+        log('Update your bic config in package.json (example - "bic": ["src"]). Refer Readme.md for help.', 'brightYellow');
+        log('Using default bic config.', 'yellow');
     }
 
-    const includeDirs = [...(package.bic || defaultIncludeDirs)]
+    const includeDirs = [...(Array.isArray(package.bic) ? package.bic : defaultIncludeDirs)]
         .reduce((acc, includeDir) => {
             includeDir = path.join(projectDirPath, includeDir);
             if (fs.existsSync(includeDir)) {
@@ -73,7 +76,7 @@ const buildIfChanged = async (projectDirPath, forceBuild) => {
         log('No New Changes! Skipping Build and using previous build!', 'brightYellow');
         multiLog([
             { message: 'Done in', color: 'brightCyan' },
-            { message: `${((Date.now() - startTime) / 1000).toFixed(2)}s`, color: 'brightGreen' },
+            { message: `${((Date.now() - startTime) / 1000).toFixed(2)}s.`, color: 'brightGreen' },
         ]);
         return;
     }
@@ -88,7 +91,7 @@ const buildIfChanged = async (projectDirPath, forceBuild) => {
     fs.writeFileSync(cachedChecksumFilePath, projectChecksum, 'utf-8');
     multiLog([
         { message: 'Done in', color: 'brightCyan' },
-        { message: `${((Date.now() - startTime) / 1000).toFixed(2)}s`, color: 'brightGreen' },
+        { message: `${((Date.now() - startTime) / 1000).toFixed(2)}s.`, color: 'brightGreen' },
     ]);
 };
 
