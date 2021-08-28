@@ -1,11 +1,11 @@
 const path = require('path');
-const fs = require('fs-extra');
-const { cacheRepo, uuid, getDirFilePaths, checksum, spawnAsync, log, multiLog } = require('./utils');
+const fs = require('fs');
+const { cacheRepo, getDirFilePaths, checksum, spawnAsync, log, multiLog } = require('./utils');
 
 const defaultIncludeDirs = ['src'];
 const packageFileName = 'package.json';
 
-const buildIfChanged = async (projectDirPath) => {
+const buildIfChanged = async (projectDirPath, forceBuild) => {
     const startTime = Date.now();
     multiLog([
         { message: 'Project Dir:', color: 'brightCyan' },
@@ -53,14 +53,15 @@ const buildIfChanged = async (projectDirPath) => {
         }, [])
         .sort((a, b) => a.localeCompare(b));
 
-    const projectData = projectFilePaths.reduce((acc, filePath) => {
-        const fileData = fs.readFileSync(filePath).toString('hex');
-        return `${acc}${fileData}`;
-    }, '');
+    const projectData = projectFilePaths.join('')
+        + projectFilePaths.reduce((acc, filePath) => {
+            const fileData = fs.readFileSync(filePath).toString('hex');
+            return `${acc}${fileData}`;
+        }, '');
 
     const projectChecksum = checksum(projectData);
 
-    const cacheFileName = uuid(projectDirPath);
+    const cacheFileName = checksum(projectDirPath);
     const cachedChecksumFilePath = path.join(cacheRepo, cacheFileName);
 
     let oldChecksum = null;
@@ -68,22 +69,26 @@ const buildIfChanged = async (projectDirPath) => {
         oldChecksum = fs.readFileSync(cachedChecksumFilePath, 'utf-8');
     }
 
-    if (oldChecksum === projectChecksum) {
-        log('No Changes! Skipping Build and using previous build!', 'brightYellow');
+    if (!forceBuild && oldChecksum === projectChecksum) {
+        log('No New Changes! Skipping Build and using previous build!', 'brightYellow');
         multiLog([
             { message: 'Done in', color: 'brightCyan' },
-            { message: `${Math.floor((Date.now() - startTime) / 1000)}s`, color: 'brightGreen' },
+            { message: `${((Date.now() - startTime) / 1000).toFixed(2)}s`, color: 'brightGreen' },
         ]);
         return;
     }
 
-    log('New Changes! Build Needed!', 'brightYellow');
+    if (forceBuild) {
+        log('No New Changes! But Force Building!', 'brightYellow');
+    } else {
+        log('New Changes! Build Needed!', 'brightYellow');
+    }
 
     await spawnAsync(`cd ${projectDirPath} && npm run build`);
     fs.writeFileSync(cachedChecksumFilePath, projectChecksum, 'utf-8');
     multiLog([
         { message: 'Done in', color: 'brightCyan' },
-        { message: `${Math.floor((Date.now() - startTime) / 1000)}s`, color: 'brightGreen' },
+        { message: `${((Date.now() - startTime) / 1000).toFixed(2)}s`, color: 'brightGreen' },
     ]);
 };
 

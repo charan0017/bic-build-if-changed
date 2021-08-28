@@ -1,9 +1,8 @@
 const path = require('path');
+const fs = require('fs');
 const crypto = require('crypto');
 const { spawn } = require('child_process');
-const fs = require('fs-extra');
 const colors = require('colors/safe');
-const { NIL: NIL_UUID, v5: uuidv5 } = require('uuid');
 
 const cacheRepo = path.resolve(path.join(__dirname, '../cache'));
 if (!fs.existsSync(cacheRepo)) {
@@ -18,7 +17,6 @@ const multiLog = (msgs) => {
 
 const utils = {
     cacheRepo,
-    uuid: (str) => uuidv5(str, NIL_UUID),
     log,
     multiLog,
 };
@@ -43,7 +41,6 @@ utils.getDirFilePaths = (startPath, recursive = true) => {
 
 utils.checksum = (data, options = {}) => {
     const { algorithm = 'sha1', encoding = 'hex' } = options;
-
     const hash = crypto.createHash(algorithm);
     hash.setEncoding(encoding);
     return hash.update(data).digest('hex');

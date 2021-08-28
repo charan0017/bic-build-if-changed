@@ -42,6 +42,8 @@ yarn add bic-build-if-changed -D
 yarn build-if-changed
 # or
 yarn bic
+# you can use -force (or) -F flags to Force Re-Build
+yarn bic -F
 ```
 
 &nbsp;

@@ -1,4 +1,6 @@
 #!/usr/bin/env node
 
-require('../src')(process.cwd())
+const hasFlag = require('has-flag');
+
+require('../src')(process.cwd(), hasFlag('-force') || hasFlag('-F'))
     .catch(console.error);
